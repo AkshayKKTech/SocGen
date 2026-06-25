@@ -27,7 +27,7 @@ pipeline {
                 sh "terraform plan -out=tfplan"
                 }
             }
-        stage('Terraform apply") {
+        stage('Terraform apply') {
             steps {
                 echo "applying terraform"
                 sh "terrafom apply -auto-approve tfplan
