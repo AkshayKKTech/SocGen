@@ -5,10 +5,10 @@ data "aws_vpc" "existing_vpc" {
     data "aws_subnet" "existing_subnet" {
         id = "subnet-08ac1365e89d43bfb"
     }
-vpc_id      = data.aws_subnet.existing_subnet.vpc_id
 resource "aws_security_group" "sg" {
   name = "socgensg"
   description = "allow inboud and outbond port"
+vpc_id      = data.aws_subnet.existing_subnet.vpc_id
   
   ingress {
     from_port = 22
