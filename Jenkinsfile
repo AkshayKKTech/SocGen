@@ -34,11 +34,17 @@ pipeline {
             }
         }
         
-        stage('Terraform Apply') {
+        /*stage('Terraform Apply') {
             steps {
                 echo "Applying configuration..."
                 // Fixed: Added the missing closing quote at the end
                 sh "terraform apply -auto-approve tfplan"
+            }
+        }*/
+        stage('Terraform destroy') {
+            steps {
+                echo "destroying objects"
+                sh "terraform destroy -auto-apply tfplan
             }
         }
     }
