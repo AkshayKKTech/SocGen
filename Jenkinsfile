@@ -2,36 +2,44 @@ pipeline {
     agent {
         docker {
             image 'hashicorp/terraform:1.7'
-            args  '--entrypoint=' // Overrides default entrypoint to let Jenkins control execution
+            args  '--entrypoint=' 
         }
     }
+    
     environment {
-        AWS_ACCESS_KEY_ID = credential('AWS_ACCESS_KEY')
-        AWS_SECRETE_KEY_ID = credentials('AWS_SECRETE_KEY')
-        }
+        // Fixed: pluralized 'credentials' and used standard AWS env variable names
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+    
     stages {
-        stage('checkout scm') {
+        stage('Checkout SCM') {
             steps {
-                sh "checkout scm"
-                }
-            }
-        stage('Terraform init') {
-            steps {
-                echo "Initialising"
-                sh "terraform init"
-                }
-            }
-        stage('Terraform plan') {
-            steps {
-                echo "Planning steps"
-                sh "terraform plan -out=tfplan"
-                }
-            }
-        stage('Terraform apply') {
-            steps {
-                echo "applying terraform"
-                sh "terraform apply -auto-approve tfplan
-                }
+                // Fixed: Running it as an official Jenkins DSL method, not a shell script
+                checkout scm
             }
         }
-
+        
+        stage('Terraform Init') {
+            steps {
+                echo "Initializing..."
+                sh "terraform init"
+            }
+        }
+        
+        stage('Terraform Plan') {
+            steps {
+                echo "Planning steps..."
+                sh "terraform plan -out=tfplan"
+            }
+        }
+        
+        stage('Terraform Apply') {
+            steps {
+                echo "Applying configuration..."
+                // Fixed: Added the missing closing quote at the end
+                sh "terraform apply -auto-approve tfplan"
+            }
+        }
+    }
+} // Fixed: Added the missing closing brace for the pipeline block
