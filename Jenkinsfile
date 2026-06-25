@@ -30,7 +30,7 @@ pipeline {
         stage('Terraform apply') {
             steps {
                 echo "applying terraform"
-                sh "terrafom apply -auto-approve tfplan
+                sh "terraform apply -auto-approve tfplan
                 }
             }
         }
